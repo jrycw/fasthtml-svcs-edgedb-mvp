@@ -1,0 +1,6 @@
+python-fasthtml
+svcs
+edgedb==1.9.0
+ruff
+isort
+
