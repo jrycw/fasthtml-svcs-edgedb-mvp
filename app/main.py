@@ -13,6 +13,7 @@ from .models import Todo, TodoCreate
 from .queries import create_todo_async_edgeql as create_todo_qry
 from .queries import delete_todo_async_edgeql as delete_todo_qry
 from .queries import get_todos_async_edgeql as get_todos_qry
+from .utils import query2ft
 
 app, rt = fast_app(
     lifespan=lifespan,
@@ -23,19 +24,6 @@ setup_toasts(app)
 
 def mk_input(**kw):
     return Input(id="new-title", name="title", placeholder="New Todo", **kw)
-
-
-def query2ft(FTdataclass, query_results):
-    def _query2ft(FTdataclass, query_result):
-        return FTdataclass(**asdict(query_result))
-
-    try:
-        return [
-            _query2ft(FTdataclass, query_result)
-            for query_result in query_results
-        ]
-    except TypeError:  # not iterable
-        return _query2ft(FTdataclass, query_results)
 
 
 @app.get("/")
