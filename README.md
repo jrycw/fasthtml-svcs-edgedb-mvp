@@ -8,10 +8,11 @@ This repository is focused on building an MVP todo app using `EdgeDB`, `SVCS`, a
 ```elm
 module default {
    type Todo {
-    required title: str {
-      constraint min_len_value(1);
-      constraint max_len_value(50);
-    };
+      required title: str {
+         constraint exclusive;
+         constraint min_len_value(1);
+         constraint max_len_value(50);
+      };
    }
 
    function select_todo_by_id(tid: uuid) -> Todo

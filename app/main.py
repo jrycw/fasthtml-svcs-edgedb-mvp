@@ -30,7 +30,10 @@ def query2ft(FTdataclass, query_results):
         return FTdataclass(**asdict(query_result))
 
     try:
-        return [_query2ft(FTdataclass, query_result) for query_result in query_results]
+        return [
+            _query2ft(FTdataclass, query_result)
+            for query_result in query_results
+        ]
     except TypeError:  # not iterable
         return _query2ft(FTdataclass, query_results)
 
@@ -61,10 +64,16 @@ async def homepage(request: Request):
 async def post(session, request: Request, todo_create: TodoCreate):
     try:
         db_client = await svcs.starlette.aget(request, AsyncIOClient)
-        todo = await create_todo_qry.create_todo(db_client, **asdict(todo_create))
+        todo = await create_todo_qry.create_todo(
+            db_client, **asdict(todo_create)
+        )
         return query2ft(Todo, todo), mk_input(hx_swap_oob="true")
     except edgedb.errors.ConstraintViolationError:
-        add_toast(session, f'The title "{todo_create.title}" is duplicated.', "error")
+        add_toast(
+            session,
+            f'The title "{todo_create.title}" is duplicated.',
+            "error",
+        )
 
 
 @rt("/{tid}")
