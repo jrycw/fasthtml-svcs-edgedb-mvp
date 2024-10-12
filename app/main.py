@@ -57,11 +57,14 @@ async def post(session, request: Request, todo_create: TodoCreate):
         )
         return query2ft(Todo, todo), mk_input(hx_swap_oob="true")
     except edgedb.errors.ConstraintViolationError:
-        add_toast(
-            session,
-            f'The title "{todo_create.title}" is duplicated.',
-            "error",
-        )
+        title = todo_create.title
+        if len(title) < 1:
+            err_msg = f'The title must contain at least 1 character.'
+        elif len(title) > 50:
+            err_msg = f'The title must not exceed 50 characters.'
+        else:
+            err_msg = f'The title "{title}" is duplicated.'
+        add_toast(session, err_msg, "error")
 
 
 @rt("/{tid}")
