@@ -5,6 +5,7 @@ from fasthtml.common import A, Li, Strong
 from .utils import get_todo_id
 
 
+# TODO: Would `Todo` be improved by subclassing `TodoCreate`?
 @dataclass
 class Todo:
     id: str
